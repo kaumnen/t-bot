@@ -11,4 +11,4 @@ class Quote:
             return f'"{data["content"]}"{nl}- {data["author"]}'
 
         else:
-            return 'I\'m having hard time communicating with quotes. Please try later!'
+            return 'I\'m having hard time communicating with quotes all over internet. Please try later!'

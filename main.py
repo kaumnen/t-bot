@@ -3,14 +3,17 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Inlin
 import logging
 import time
 
+# import for NASA's APOD
+from nasa_apod import Nasa_apod
+
 # responsible for quotes
 from random_quote import Quote
 
 # responsible for cat pictures and gifs
 from random_cat_picture import Cats
 
-# import for NASA's APOD
-from nasa_apod import Nasa_apod
+# responsible for dog pictures
+from random_dog_picture import Dogs
 
 # reading secret info
 from configparser import ConfigParser
@@ -61,6 +64,7 @@ def help_command(update, context):
     sending_message(update, context, '3. Send /quote to me, and I will return awesome quote for you!')
     sending_message(update, context, '4. Send /cat or /catgif to me, and I will return either cat\'s '
                                      'picture or gif. Meow!')
+    sending_message(update, context, '5. Send /dogo to me, and I will send you great dog picture. Woof!')
     sending_message(update, context, 'For now, I can '
                                      'do '
                                      '/caps command when you mention me somewhere. Just '
@@ -81,6 +85,7 @@ def welp(update, context):
                                      '/quote - returns great quote from internet\n'
                                      '/cat - returns cat picture\n'
                                      '/catgif - returns cat gif\n'
+                                     '/dogo - returns dog picture\n'
                                      '/help - returns help obviously\n'
                                      '/welp - this escalates quickly\n')
 
@@ -116,6 +121,9 @@ def cat_picture(update, context):
 def cat_gif(update, context):
     context.bot.send_animation(chat_id=update.effective_chat.id,
                                animation=Cats().cat_gif_url())
+
+def dog_picture(update, context):
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=Dogs().dog_url())
 
 # inline command functions
 def inline_caps(update, context):
@@ -165,6 +173,9 @@ dispatcher.add_handler(cat_picture_handler)
 
 cat_gif_handler = CommandHandler('catgif', cat_gif)
 dispatcher.add_handler(cat_gif_handler)
+
+dog_picture_handler = CommandHandler('dogo', dog_picture)
+dispatcher.add_handler(dog_picture_handler)
 
 # inline commands to dispatcher
 inline_caps_handler = InlineQueryHandler(inline_caps)

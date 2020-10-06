@@ -2,6 +2,7 @@ from telegram import *
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 import logging
 import time
+from random_quote import Quote
 
 # import for NASA's APOD
 from nasa_apod import Nasa_apod
@@ -22,57 +23,61 @@ dispatcher = updater.dispatcher
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 
-def sending_message(context, update, message):
+def sending_message(update, context, message):
     context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     time.sleep(3)
     context.bot.send_message(chat_id=update.effective_chat.id, text=message)
+
 
 def waiting_writing(update, context, n):
     context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
     time.sleep(n)
 
+
 # command functions
 def start(update, context):
-    sending_message(context, update, 'Hey there, I\'m t-bot\. \n\nWelcome\! \n\n'
-                                                                    'Waiting for some phenomenal commands 😃')
-    sending_message(context, update, 'Are you confused?  \'cuz I\'d be')
-    sending_message(context, update, 'In case you are still confused, send me /help for more info.')
+    sending_message(update, context, 'Hey there, I\'m t-bot\. \n\nWelcome\! \n\n'
+                                     'Waiting for some phenomenal commands 😃')
+    sending_message(update, context, 'Are you confused?  \'cuz I\'d be')
+    sending_message(update, context, 'In case you are still confused, send me /help for more info.')
 
 
 def help_command(update, context):
-    sending_message(context, update, 'You thought I can just scream in chat? '
-                                                                    'Ooh no no, pay attention:')
-    sending_message(context, update, '1. Send /caps and '
-                                    'write message you want me to repeat IN CAPS!')
+    sending_message(update, context, 'You thought I can just scream in chat? '
+                                     'Ooh no no, pay attention:')
+    sending_message(update, context, '1. Send /caps and '
+                                     'write message you want me to repeat IN CAPS!')
 
     context.bot.send_animation(chat_id=update.effective_chat.id,
                                animation='https://media1.tenor.com/images/a954d1d5e35324dae774c5bfb8095cc6/tenor.gif')
     waiting_writing(update, context, 3)
-    sending_message(context, update, '2. Send /nasa to me, and I will return NASA\'s '
-                                                                    'Astronomy Picture Of the Day!')
-    sending_message(context, update, 'For now, I can '
-                                                                    'do '
-                                                                    '/caps command when you mention me somewhere. Just '
-                                                                    'write \'@awsmm_bot some_text\', replace '
-                                                                    'some_text with your text, and hit that \'Caps\' '
-                                                                    'button 😂')
-    sending_message(context, update, 'Also, I will repeat'
-                                                                    ' (in private chat) whatever you say to me that'
-                                                                    ' ain\'t command. '
-                                                                    'Remember that I don\'t have any them brains lol.'
-                                                                    '\n\nIf you need short version of /help, '
-                                                                    'send me /welp.')
+    sending_message(update, context, '2. Send /nasa to me, and I will return NASA\'s '
+                                     'Astronomy Picture Of the Day!')
+    sending_message(update, context, '3. Send /quote to me, and I will return awesome quote for you!')
+    sending_message(update, context, 'For now, I can '
+                                     'do '
+                                     '/caps command when you mention me somewhere. Just '
+                                     'write \'@awsmm_bot some_text\', replace '
+                                     'some_text with your text, and hit that \'Caps\' '
+                                     'button 😂')
+    sending_message(update, context, 'Also, I will repeat'
+                                     ' (in private chat) whatever you say to me that'
+                                     ' ain\'t command. '
+                                     'Remember that I don\'t have any them brains lol.'
+                                     '\n\nIf you need short version of /help, '
+                                     'send me /welp.')
+
 
 def welp(update, context):
-    sending_message(context, update, '/caps - returns same text CAPS-ED\n'
-                                                                    '/nasa - returns NASA\'s APOD\n'
-                                                                    '/help - returns help obviously\n'
-                                                                    '/welp - this escalates quickly\n')
+    sending_message(update, context, '/caps - returns same text CAPS-ED\n'
+                                     '/nasa - returns NASA\'s APOD\n'
+                                     '/quote - returns great quote from internet\n'
+                                     '/help - returns help obviously\n'
+                                     '/welp - this escalates quickly\n')
 
 
 def echo(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
-    print(update.message.text)
 
 
 def caps(update, context):
@@ -90,7 +95,11 @@ def nasa(update, context):
             waiting_writing(update, context, 5)
             context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
     except:
-        sending_message(context, update, 'This service is not operational right now. Please try later.')
+        sending_message(update, context, 'This service is not operational right now. Please try later.')
+
+
+def quote(update, context):
+    sending_message(update, context, Quote().quote_msg())
 
 
 # inline command functions
@@ -111,7 +120,7 @@ def inline_caps(update, context):
 
 # if user input non-existing command - MUST BE LAST ONE DEFINED
 def unknown(update, context):
-    sending_message(context, update, 'Sorry, I DON\'T UNDERSTAND THAT!')
+    sending_message(update, context, 'Sorry, I DON\'T UNDERSTAND THAT!')
 
 
 # normal commands to dispatcher
@@ -132,6 +141,9 @@ dispatcher.add_handler(caps_handler)
 
 nasa_apod_handler = CommandHandler('nasa', nasa)
 dispatcher.add_handler(nasa_apod_handler)
+
+quote_handler = CommandHandler('quote', quote)
+dispatcher.add_handler(quote_handler)
 
 # inline commands to dispatcher
 inline_caps_handler = InlineQueryHandler(inline_caps)

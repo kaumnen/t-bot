@@ -15,6 +15,9 @@ from random_cat_picture import Cats
 # responsible for dog pictures
 from random_dog_picture import Dogs
 
+# url shortener
+from url_shortener import short_url
+
 # reading secret info
 from configparser import ConfigParser
 
@@ -30,6 +33,7 @@ updater = Updater(token=api_key, use_context=True)
 dispatcher = updater.dispatcher
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
+
 
 def sending_message(update, context, message):
     context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
@@ -55,16 +59,19 @@ def help_command(update, context):
                                      'Ooh no no, pay attention:')
     sending_message(update, context, '1. Send /caps and '
                                      'write message you want me to repeat IN CAPS!')
-
+    time.sleep(3)
     context.bot.send_animation(chat_id=update.effective_chat.id,
                                animation='https://media1.tenor.com/images/a954d1d5e35324dae774c5bfb8095cc6/tenor.gif')
     waiting_writing(update, context, 3)
-    sending_message(update, context, '2. Send /nasa to me, and I will return NASA\'s '
+    sending_message(update, context, '2. Send /url [URL] to me, and I will return shortened one '
+                                     '(if you have reealy long url 😁).'
+                                     '\nExclude \'https://www.\'!\ne.g. /url t.me/awsmm_bot')
+    sending_message(update, context, '3. Send /nasa to me, and I will return NASA\'s '
                                      'Astronomy Picture Of the Day!')
-    sending_message(update, context, '3. Send /quote to me, and I will return awesome quote for you!')
-    sending_message(update, context, '4. Send /cat or /catgif to me, and I will return either cat\'s '
+    sending_message(update, context, '4. Send /quote to me, and I will return awesome quote for you!')
+    sending_message(update, context, '5. Send /cat or /catgif to me, and I will return either cat\'s '
                                      'picture or gif. Meow!')
-    sending_message(update, context, '5. Send /dogo to me, and I will send you great dog picture. Woof!')
+    sending_message(update, context, '6. Send /dogo to me, and I will send you great dog picture. Woof!')
     sending_message(update, context, 'For now, I can '
                                      'do '
                                      '/caps command when you mention me somewhere. Just '
@@ -81,6 +88,7 @@ def help_command(update, context):
 
 def welp(update, context):
     sending_message(update, context, '/caps - returns same text CAPS-ED\n'
+                                     '/url [URL] - returns shortened url, EXCLUDE https://www.\n'
                                      '/nasa - returns NASA\'s APOD\n'
                                      '/quote - returns great quote from internet\n'
                                      '/cat - returns cat picture\n'
@@ -96,7 +104,25 @@ def echo(update, context):
 
 def caps(update, context):
     text_caps = ' '.join(context.args).upper()
+    print(context.args[0])
     context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
+
+
+def url_shortener(update, context):
+    url_provided = context.args[0]
+    final_url = short_url(url_provided)
+    if final_url:
+        if len(final_url) > len(url_provided):
+            sending_message(update, context, f'Well your link is shorter.. 😂\n'
+                                             f'However, here is \'shortened\' one: {final_url}')
+        elif len(final_url) < len(url_provided):
+            sending_message(update, context, f'My link is shorted for exactly {abs(len(final_url) - len(url_provided))} '
+                                             f'characters 😎\nHere you go: {final_url}')
+        else:
+            sending_message(update, context, f'Lengths are same! Your same-length url:\n {final_url}')
+    else:
+        sending_message(update, context, 'Either your url is too long, or my friends out'
+                                         ' there are on quick vacation. Please try later!')
 
 
 def nasa(update, context):
@@ -115,15 +141,19 @@ def nasa(update, context):
 def quote(update, context):
     sending_message(update, context, Quote().quote_msg())
 
+
 def cat_picture(update, context):
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=Cats().cat_url())
+
 
 def cat_gif(update, context):
     context.bot.send_animation(chat_id=update.effective_chat.id,
                                animation=Cats().cat_gif_url())
 
+
 def dog_picture(update, context):
     context.bot.send_photo(chat_id=update.effective_chat.id, photo=Dogs().dog_url())
+
 
 # inline command functions
 def inline_caps(update, context):
@@ -161,6 +191,9 @@ dispatcher.add_handler(echo_handler)
 
 caps_handler = CommandHandler('caps', caps)
 dispatcher.add_handler(caps_handler)
+
+url_shortener_handler = CommandHandler('url', url_shortener)
+dispatcher.add_handler(url_shortener_handler)
 
 nasa_apod_handler = CommandHandler('nasa', nasa)
 dispatcher.add_handler(nasa_apod_handler)

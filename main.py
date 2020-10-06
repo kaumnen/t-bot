@@ -2,7 +2,12 @@ from telegram import *
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 import logging
 import time
+
+# responsible for quotes
 from random_quote import Quote
+
+# responsible for cat pictures and gifs
+from random_cat_picture import Cats
 
 # import for NASA's APOD
 from nasa_apod import Nasa_apod
@@ -25,7 +30,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 def sending_message(update, context, message):
     context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
-    time.sleep(3)
+    time.sleep(2)
     context.bot.send_message(chat_id=update.effective_chat.id, text=message)
 
 
@@ -54,6 +59,8 @@ def help_command(update, context):
     sending_message(update, context, '2. Send /nasa to me, and I will return NASA\'s '
                                      'Astronomy Picture Of the Day!')
     sending_message(update, context, '3. Send /quote to me, and I will return awesome quote for you!')
+    sending_message(update, context, '4. Send /cat or /catgif to me, and I will return either cat\'s '
+                                     'picture or gif. Meow!')
     sending_message(update, context, 'For now, I can '
                                      'do '
                                      '/caps command when you mention me somewhere. Just '
@@ -72,6 +79,8 @@ def welp(update, context):
     sending_message(update, context, '/caps - returns same text CAPS-ED\n'
                                      '/nasa - returns NASA\'s APOD\n'
                                      '/quote - returns great quote from internet\n'
+                                     '/cat - returns cat picture\n'
+                                     '/catgif - returns cat gif\n'
                                      '/help - returns help obviously\n'
                                      '/welp - this escalates quickly\n')
 
@@ -101,6 +110,12 @@ def nasa(update, context):
 def quote(update, context):
     sending_message(update, context, Quote().quote_msg())
 
+def cat_picture(update, context):
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=Cats().cat_url())
+
+def cat_gif(update, context):
+    context.bot.send_animation(chat_id=update.effective_chat.id,
+                               animation=Cats().cat_gif_url())
 
 # inline command functions
 def inline_caps(update, context):
@@ -144,6 +159,12 @@ dispatcher.add_handler(nasa_apod_handler)
 
 quote_handler = CommandHandler('quote', quote)
 dispatcher.add_handler(quote_handler)
+
+cat_picture_handler = CommandHandler('cat', cat_picture)
+dispatcher.add_handler(cat_picture_handler)
+
+cat_gif_handler = CommandHandler('catgif', cat_gif)
+dispatcher.add_handler(cat_gif_handler)
 
 # inline commands to dispatcher
 inline_caps_handler = InlineQueryHandler(inline_caps)

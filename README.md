@@ -14,11 +14,23 @@ pip3 install -r requirements.txt
 
 ## DEV Usage
 
-Navigate to cloned folder, and run in terminal:
+Every file that needs secret key uses configparser. 
+
+If you want to test it with your own ones, make .ini file in folder where main.py file is, should look like this:
 
 ```
-python3 main.py
+[TELEGRAM_API]
+api_key=[your_api_key_here]
+
+[NASA_API]
+api_key=[your_api_key_here]
+
+[CATS_API]
+api_key=[your_api_key_here]
+
 ```
+
+**Make sure to write keys without quotes!**
 
 ## API's used
 [URL Shortener](https://goolnk.com/)

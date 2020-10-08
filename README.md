@@ -21,6 +21,8 @@ python3 main.py
 ```
 
 ## API's used
+[URL Shortener](https://goolnk.com/)
+
 [NASA API](https://api.nasa.gov/)
 
 [Quotes API](http://quotable.io/)

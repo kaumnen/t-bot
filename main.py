@@ -4,19 +4,19 @@ import logging
 import time
 
 # import for NASA's APOD
-from nasa_apod import Nasa_apod
+from apis.nasa_apod import Nasa_apod
 
 # responsible for quotes
-from random_quote import Quote
+from apis.random_quote import Quote
 
 # responsible for cat pictures and gifs
-from random_cat_picture import Cats
+from apis.random_cat_picture import Cats
 
 # responsible for dog pictures
-from random_dog_picture import Dogs
+from apis.random_dog_picture import Dogs
 
 # url shortener
-from url_shortener import short_url
+from apis.url_shortener import short_url
 
 # reading secret info
 from configparser import ConfigParser

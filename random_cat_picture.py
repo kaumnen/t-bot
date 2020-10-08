@@ -13,11 +13,11 @@ api_key = cats_api["api_key"]
 class Cats:
     def __init__(self):
         self.url = 'https://api.thecatapi.com/v1/images/search'
+        # authenticate
         self.auth_header = {'x-api-key':api_key}
+        # get jpg, png and gif
         self.r = requests.get(self.url + '?mime_types=jpg,png', self.auth_header)
-        print(self.r.json()[0]['url'])
         self.r_gif = requests.get(self.url + '?mime_types=gif', self.auth_header)
-        print(self.r_gif.json()[0]['url'])
 
     def cat_url(self):
         if self.r.status_code == 200:

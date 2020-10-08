@@ -109,20 +109,30 @@ def caps(update, context):
 
 
 def url_shortener(update, context):
-    url_provided = context.args[0]
-    final_url = short_url(url_provided)
-    if final_url:
-        if len(final_url) > len(url_provided):
-            sending_message(update, context, f'Well your link is shorter.. 😂\n'
-                                             f'However, here is \'shortened\' one: {final_url}')
-        elif len(final_url) < len(url_provided):
-            sending_message(update, context, f'My link is shorted for exactly {abs(len(final_url) - len(url_provided))} '
-                                             f'characters 😎\nHere you go: {final_url}')
+    # if there is url passed after /url
+    if context.args:
+        url_provided = context.args[0]
+        final_url = short_url(url_provided)
+
+        if final_url:
+
+            if len(final_url) > len(url_provided):
+                sending_message(update, context, f'Well your link is shorter.. 😂\n'
+                                                 f'However, here is \'shortened\' one: {final_url}')
+            elif len(final_url) < len(url_provided):
+                sending_message(update, context, f'My link is shorted for exactly '
+                                                 f'{abs(len(final_url) - len(url_provided))} '
+                                                 f'characters 😎\nHere you go: {final_url}')
+
+            else:
+                sending_message(update, context, f'Lengths are same! Your same-length url:\n {final_url}')
+
         else:
-            sending_message(update, context, f'Lengths are same! Your same-length url:\n {final_url}')
+            sending_message(update, context, 'Either your url is too long, or my friends out'
+                                             ' there are on quick vacation. Please try later!')
+
     else:
-        sending_message(update, context, 'Either your url is too long, or my friends out'
-                                         ' there are on quick vacation. Please try later!')
+        sending_message(update, context, 'Please use command as intended.\n\n/url [URL]  ( EXCLUDE https://www. )')
 
 
 def nasa(update, context):

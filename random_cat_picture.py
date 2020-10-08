@@ -1,20 +1,34 @@
 import requests
+from configparser import ConfigParser
+
+# read .ini file
+config_object = ConfigParser()
+config_object.read(".ini")
+
+# get the data
+cats_api = config_object["CATS_API"]
+api_key = cats_api["api_key"]
 
 
 class Cats:
     def __init__(self):
-        self.r = requests.request('GET', 'https://cataas.com/c')
-        self.r_gif = requests.request('GET', 'https://cataas.com/c/gif')
+        self.url = 'https://api.thecatapi.com/v1/images/search'
+        self.auth_header = {'x-api-key':api_key}
+        self.r = requests.get(self.url + '?mime_types=jpg,png', self.auth_header)
+        print(self.r.json()[0]['url'])
+        self.r_gif = requests.get(self.url + '?mime_types=gif', self.auth_header)
+        print(self.r_gif.json()[0]['url'])
 
     def cat_url(self):
         if self.r.status_code == 200:
-            return self.r.url
+            return self.r.json()[0]['url']
         else:
             return 'Meow! I\'m having hard time communicating with cat server. Please try later!'
 
 
     def cat_gif_url(self):
         if self.r_gif.status_code == 200:
-            return self.r_gif.url
+            return self.r_gif.json()[0]['url']
         else:
             return 'Meow! I\'m having hard time communicating with cat server. Please try later!'
+Cats()

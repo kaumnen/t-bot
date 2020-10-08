@@ -11,6 +11,7 @@ config_object.read(".ini")
 nasa_api = config_object["NASA_API"]
 api_key = nasa_api["api_key"]
 
+
 class Nasa_apod:
     def __init__(self):
         # Initialize Nasa class by creating an object:

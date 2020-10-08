@@ -1,0 +1,3 @@
+nasapy~=0.2.7
+requests~=2.24.0
+telegram~=0.0.1

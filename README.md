@@ -1,6 +1,6 @@
 # T-bot
 
-T-bot is Telegram bot utilizing a few API's. Operating 24/7, find it [here.](https://t.me/awsmm_bot) 
+T-bot is Telegram bot utilizing a few API's. Find it [here.](https://t.me/awsmm_bot) 
 
 Built using [python-telegram-bot.](https://github.com/python-telegram-bot/python-telegram-bot)
 

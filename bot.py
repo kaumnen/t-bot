@@ -136,15 +136,15 @@ def url_shortener(update, context):
 
 
 def nasa(update, context):
-    try:
-        context.bot.send_photo(chat_id=update.effective_chat.id, photo=Nasa_apod().retrieve_picture_url())
-        waiting_writing(update, context, 2)
-        context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_picture_info())
 
-        if Nasa_apod().retrieve_text_with_picture():
-            waiting_writing(update, context, 5)
-            context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
-    
+    context.bot.send_photo(chat_id=update.effective_chat.id, photo=Nasa_apod().retrieve_picture_url())
+    waiting_writing(update, context, 2)
+    context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_picture_info())
+
+    if Nasa_apod().retrieve_text_with_picture():
+        waiting_writing(update, context, 5)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
+
 
 
 def quote(update, context):

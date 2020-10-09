@@ -42,7 +42,3 @@ api_key=[your_api_key_here]
 [Cats API](https://thecatapi.com/)
 
 [Dogs API](https://random.dog/)
-
-
-## License
-[MIT](https://choosealicense.com/licenses/mit/)

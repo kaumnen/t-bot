@@ -103,9 +103,12 @@ def echo(update, context):
 
 
 def caps(update, context):
-    text_caps = ' '.join(context.args).upper()
-    print(context.args[0])
-    context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
+    if context.args:
+        text_caps = ' '.join(context.args).upper()
+        context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
+    else:
+        sending_message(update, context, 'Well, you did not specify what should I caps, I do not know what to '
+                                         'say! Please try again.')
 
 
 def url_shortener(update, context):
@@ -228,9 +231,3 @@ dispatcher.add_handler(inline_caps_handler)
 # if user input non-existing command - MUST BE LAST ONE DEFINED
 unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(unknown_handler)
-
-# heroku deploying
-updater.start_polling()
-
-# working until stop signal received (SIGINT)
-updater.idle()

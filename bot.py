@@ -3,6 +3,11 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Inlin
 import logging
 import time
 
+# heroku deployment
+import os
+
+PORT = int(os.environ.get('PORT', 5000))
+
 # import for NASA's APOD
 from apis.nasa_apod import Nasa_apod
 
@@ -228,8 +233,11 @@ dispatcher.add_handler(inline_caps_handler)
 unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(unknown_handler)
 
-# start
-updater.start_polling()
+# heroku deploying
+updater.start_webhook(listen="0.0.0.0",
+                      port=int(PORT),
+                      url_path=api_key)
+updater.bot.setWebhook('https://evening-taiga-19189.herokuapp.com/' + api_key)
 
 # working until stop signal received (SIGINT)
 updater.idle()

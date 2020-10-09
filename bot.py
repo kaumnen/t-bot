@@ -1,9 +1,11 @@
-from telegram import *
+import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 import logging
 import time
+
 import os
 PORT = int(os.environ.get('PORT', 5000))
+
 # import for NASA's APOD
 from apis.nasa_apod import Nasa_apod
 
@@ -37,13 +39,13 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 
 def sending_message(update, context, message):
-    context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
+    context.bot.send_chat_action(chat_id=update.effective_chat.id, action=telegram.ChatAction.TYPING)
     time.sleep(2)
     context.bot.send_message(chat_id=update.effective_chat.id, text=message)
 
 
 def waiting_writing(update, context, n):
-    context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
+    context.bot.send_chat_action(chat_id=update.effective_chat.id, action=telegram.ChatAction.TYPING)
     time.sleep(n)
 
 
@@ -137,15 +139,17 @@ def url_shortener(update, context):
 
 
 def nasa(update, context):
+    try:
+        context.bot.send_photo(chat_id=update.effective_chat.id, photo=Nasa_apod().retrieve_picture_url())
+        waiting_writing(update, context, 2)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_picture_info())
 
-    context.bot.send_photo(chat_id=update.effective_chat.id, photo=Nasa_apod().retrieve_picture_url())
-    waiting_writing(update, context, 2)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_picture_info())
-
-    if Nasa_apod().retrieve_text_with_picture():
-        waiting_writing(update, context, 5)
-        context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
-
+        if Nasa_apod().retrieve_text_with_picture():
+            waiting_writing(update, context, 5)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
+    except telegram.error.BadRequest as e:
+        logging.error(e)
+        sending_message(update, context, 'This service is not operational right now. Please try later.')
 
 
 def quote(update, context):
@@ -172,10 +176,10 @@ def inline_caps(update, context):
         return
     results = list()
     results.append(
-        InlineQueryResultArticle(
+        telegram.InlineQueryResultArticle(
             id=query.upper(),
             title='Caps',
-            input_message_content=InputTextMessageContent(query.upper())
+            input_message_content=telegram.InputTextMessageContent(query.upper())
         )
     )
     context.bot.answer_inline_query(update.inline_query.id, results)

@@ -6,7 +6,7 @@ import time
 # heroku deployment
 import os
 
-PORT = int(os.environ.get('PORT', 5000))
+PORT = int(os.environ.get('PORT', '5000'))
 
 # import for NASA's APOD
 from apis.nasa_apod import Nasa_apod
@@ -235,7 +235,7 @@ dispatcher.add_handler(unknown_handler)
 
 # heroku deploying
 updater.start_webhook(listen="0.0.0.0",
-                      port=int(PORT),
+                      port=PORT,
                       url_path=api_key)
 updater.bot.setWebhook('https://evening-taiga-19189.herokuapp.com/' + api_key)
 

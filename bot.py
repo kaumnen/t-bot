@@ -3,11 +3,6 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Inlin
 import logging
 import time
 
-# heroku deployment
-import os
-
-PORT = int(os.environ.get('PORT', '5000'))
-
 # import for NASA's APOD
 from apis.nasa_apod import Nasa_apod
 
@@ -149,8 +144,7 @@ def nasa(update, context):
         if Nasa_apod().retrieve_text_with_picture():
             waiting_writing(update, context, 5)
             context.bot.send_message(chat_id=update.effective_chat.id, text=Nasa_apod().retrieve_text_with_picture())
-    except:
-        sending_message(update, context, 'This service is not operational right now. Please try later.')
+    
 
 
 def quote(update, context):
@@ -235,7 +229,7 @@ dispatcher.add_handler(unknown_handler)
 
 # heroku deploying
 updater.start_webhook(listen="0.0.0.0",
-                      port=PORT,
+                      port=int(PORT),
                       url_path=api_key)
 updater.bot.setWebhook('https://evening-taiga-19189.herokuapp.com/' + api_key)
 

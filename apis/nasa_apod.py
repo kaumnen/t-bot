@@ -28,6 +28,7 @@ class Nasa_apod:
         self.apod = nasa.picture_of_the_day(date=d, hd=True)
 
     def retrieve_picture_url(self):
+        print(self.apod["hdurl"])
         return self.apod["hdurl"]
 
     def retrieve_picture_info(self):

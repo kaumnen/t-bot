@@ -2,7 +2,8 @@ from telegram import *
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 import logging
 import time
-
+import os
+PORT = int(os.environ.get('PORT', 5000))
 # import for NASA's APOD
 from apis.nasa_apod import Nasa_apod
 

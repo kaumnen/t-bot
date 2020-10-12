@@ -23,7 +23,7 @@ class Nasa_apod:
 
     def retrieve_picture_url(self):
         print(self.apod)
-        return self.apod["hdurl"]
+        return self.apod["url"]
 
     def retrieve_picture_info(self):
         pic_info = ''

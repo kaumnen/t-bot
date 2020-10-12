@@ -1,13 +1,7 @@
 import requests
-from configparser import ConfigParser
+import os
 
-# read .ini file
-config_object = ConfigParser()
-config_object.read(".ini")
-
-# get the data
-cats_api = config_object["CATS_API"]
-api_key = cats_api["api_key"]
+api_key = os.environ['API_CATS']
 
 
 class Cats:

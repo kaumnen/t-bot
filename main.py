@@ -18,16 +18,10 @@ from apis.random_dog_picture import Dogs
 # url shortener
 from apis.url_shortener import short_url
 
-# reading secret info
-from configparser import ConfigParser
+import os
+PORT = int(os.environ.get('PORT', 5000))
 
-# read .ini file
-config_object = ConfigParser()
-config_object.read(".ini")
-
-# get the data
-tg_api = config_object["TELEGRAM_API"]
-api_key = tg_api["api_key"]
+api_key = os.environ['API_TELEGRAM']
 
 updater = Updater(token=api_key, use_context=True)
 dispatcher = updater.dispatcher
@@ -231,3 +225,9 @@ dispatcher.add_handler(inline_caps_handler)
 # if user input non-existing command - MUST BE LAST ONE DEFINED
 unknown_handler = MessageHandler(Filters.command, unknown)
 dispatcher.add_handler(unknown_handler)
+
+# start bot
+updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=api_key)
+updater.bot.setWebhook('https://calm-taiga-00740.herokuapp.com/' + api_key)

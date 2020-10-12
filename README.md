@@ -14,23 +14,18 @@ pip3 install -r requirements.txt
 
 ## DEV Usage
 
-Every file that needs secret key uses configparser. 
-
-If you want to test it with your own ones, make .ini file in folder where main.py file is, should look like this:
+If you want to test it with your own API keys, you will have to use environment variables:
 
 ```
-[TELEGRAM_API]
-api_key=[your_api_key_here]
+For Telegram api, set environment variable API_TELEGRAM with api-key value
 
-[NASA_API]
-api_key=[your_api_key_here]
+For NASA api, set environment variable API_NASA with api-key value
 
-[CATS_API]
-api_key=[your_api_key_here]
+For CATS api, set environment variable API_CATS with api-key value
 
 ```
 
-**Make sure to write keys without quotes!**
+**Make sure to set keys without quotes!**
 
 ## API's used
 [URL Shortener](https://goolnk.com/)
